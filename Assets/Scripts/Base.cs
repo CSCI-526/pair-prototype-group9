@@ -25,11 +25,9 @@ public class Base : MonoBehaviour
         UpdateHPUI();
     }
 
-    // 更新HP UI（如果有的话）
+
     void UpdateHPUI()
     {
-        // if (hpText != null)
-        //     hpText.text = "Base HP: " + currentHP;
         if (hpText != null){
             hpText.text = "HP: " + currentHP;
             Debug.Log("HP Updated: " + hpText.text); 

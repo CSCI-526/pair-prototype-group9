@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class ZombieSpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public float spawnRate = 2f;
