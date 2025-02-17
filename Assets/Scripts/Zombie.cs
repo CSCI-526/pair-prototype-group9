@@ -1,27 +1,41 @@
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    public float speed = 2f;
-    public int health = 100;
-    private Vector2 targetPosition;
+    public float speed = 5f; 
+    public float stopDistance = 5f;
+    public int damage = 10;  
+
+    private Transform baseTransform;
 
     void Start()
     {
-        targetPosition = new Vector2(transform.position.x, -10f); // 目标位置（基地位置）
+        // 找到场景中的 Base 物体
+        baseTransform = GameObject.FindGameObjectWithTag("Base").transform;
     }
 
     void Update()
     {
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        if (Vector2.Distance(transform.position, baseTransform.position) > stopDistance)
+        {
+            // 只有距离目标点大于 stopDistance 时，敌人才移动
+            transform.position = Vector2.MoveTowards(transform.position, baseTransform.position, speed * Time.deltaTime);
+        }
+        else
+        {
+            speed = 0f;
+        }
     }
 
-    // public void TakeDamage(int damage)
-    // {
-    //     health -= damage;
-    //     if (health <= 0)
-    //     {
-    //         Destroy(gameObject); // 敌人死亡
-    //     }
-    // }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Base"))
+        {
+            collision.GetComponent<Base>().TakeDamage(damage);
+             Debug.Log("Zombie: 碰到Base" ); 
+            // Destroy(gameObject);
+        }
+    }
 }
+
