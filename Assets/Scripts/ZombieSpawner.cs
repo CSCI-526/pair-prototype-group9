@@ -2,22 +2,38 @@ using UnityEngine;
 
 public class ZombieSpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
-    public float spawnRate = 2f;
-    private float nextSpawnTime;
+    public GameObject zombiePrefab; 
+    public float spawnInterval = 2f; 
+    public Vector2 spawnRangeX = new Vector2(-4f, 4f);  
+    public float fixedY = 10f;  
 
-    void Update()
+    private float timeSinceLastSpawn = 0f;  
+    private Vector3 spawnStartPos;  
+
+    private void Start()
     {
-        if (Time.time >= nextSpawnTime)
+        spawnStartPos = transform.position;
+    }
+
+    private void Update()
+    {
+        timeSinceLastSpawn += Time.deltaTime;
+
+        if (timeSinceLastSpawn >= spawnInterval)
         {
-            SpawnEnemy();
-            nextSpawnTime = Time.time + spawnRate;
+            SpawnZombie();
+            timeSinceLastSpawn = 0f;  
         }
     }
 
-    void SpawnEnemy()
+    private void SpawnZombie()
     {
-        Vector2 spawnPosition = new Vector2(Random.Range(-5f, 5f), 10f); // 生成在上方
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        float randomX = Random.Range(spawnRangeX.x, spawnRangeX.y);
+
+        float randomY = fixedY;
+
+        Vector3 spawnPosition = new Vector3(randomX, randomY, 0f);
+
+        Instantiate(zombiePrefab, spawnPosition, Quaternion.identity);
     }
 }
