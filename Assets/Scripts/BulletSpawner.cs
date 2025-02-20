@@ -4,39 +4,59 @@ using System.Collections;
 public class BulletSpawner : MonoBehaviour
 {
     public GameObject bulletPrefab;
+    public float fireRate = 2f;
+    private GameObject targetZombie;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Vector3 towerPosition;
+
+    public void Initialize(Vector3 towerPosition)
     {
-        
+        this.towerPosition = towerPosition;
+        print("Tower position: " + towerPosition);
+        StartCoroutine(ShootCoroutine());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-   
-    }
 
-    public void ShootBullet(Vector3 position, float fixedX)
-    {
-        StartCoroutine(ShootBulletCoroutine(position, fixedX));
-    }
-
-    private IEnumerator ShootBulletCoroutine(Vector3 position, float fixedX)
+    private IEnumerator ShootCoroutine()
     {
         while (true)
         {
-            GameObject bullet = Instantiate(bulletPrefab, position, Quaternion.identity);
-            Bullet bulletScript = bullet.GetComponent<Bullet>();
-            if (bulletScript != null)
+            Zombie nearestZombie = FindNearestZombie(towerPosition);
+            if (nearestZombie != null)
             {
-                bulletScript.Initialize(new Vector2(fixedX, 0)); 
+                print("Nearest zombie: " + nearestZombie);
+                ShootBullet(nearestZombie.transform.position);
             }
-            if (bullet.GetComponent<Collider2D>() == null)
-            {
-                bullet.AddComponent<BoxCollider2D>(); // Add a collider to detect collisions
-            }
-            yield return new WaitForSeconds(2f); // Wait for 2 seconds before shooting the next bullet
+            yield return new WaitForSeconds(fireRate);
         }
+    }
+
+    public void ShootBullet(Vector3 targetPosition)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, towerPosition, Quaternion.identity);
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.Initialize(targetPosition);
+        }
+    }
+
+    private Zombie FindNearestZombie(Vector3 position)
+    {
+        Zombie[] zombies = FindObjectsOfType<Zombie>();
+        Zombie nearestZombie = null;
+        float shortestDistance = Mathf.Infinity;
+
+        foreach (Zombie zombie in zombies)
+        {
+            float distance = Vector3.Distance(position, zombie.transform.position);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestZombie = zombie;
+            }
+        }
+
+        return nearestZombie;
     }
 }

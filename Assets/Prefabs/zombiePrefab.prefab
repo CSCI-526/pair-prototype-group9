@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4462921850953843428}
   - component: {fileID: 4716800807657791607}
   - component: {fileID: -7824314321068058195}
+  - component: {fileID: 5349811529593945328}
   m_Layer: 0
   m_Name: zombiePrefab
   m_TagString: Zombie
@@ -103,7 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 90
-  moveSpeed: 2
+  moveSpeed: 0.05
   damage: 30
   damagePopupPrefab: {fileID: 2437635022160800495, guid: 57af91314f46b40ebace9c0eb458f01d, type: 3}
 --- !u!50 &4716800807657791607
@@ -169,3 +170,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &5349811529593945328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073466129586462176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7e487e7693e94393bf43e8cca26bfd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 90
+  moveSpeed: 2
+  damage: 30
+  damagePopupPrefab: {fileID: 0}
