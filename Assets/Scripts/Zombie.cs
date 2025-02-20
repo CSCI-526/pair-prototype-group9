@@ -1,41 +1,61 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Zombie : MonoBehaviour
 {
-    public float speed = 5f; 
-    public float stopDistance = 5f;
-    public int damage = 10;  
+    public int health = 90;
+    public float moveSpeed = 2f;
+    public int damage = 30;
+    private float attackSpeed = 2f;
+    private float attackTimer = 0f;
+    private bool isAttacking = false;
 
-    private Transform baseTransform;
+    public GameObject damagePopupPrefab;
 
-    void Start()
+    private void Update()
     {
-        // 找到场景中的 Base 物体
-        baseTransform = GameObject.FindGameObjectWithTag("Base").transform;
-    }
-
-    void Update()
-    {
-        if (Vector2.Distance(transform.position, baseTransform.position) > stopDistance)
+        transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+        if (isAttacking)
         {
-            // 只有距离目标点大于 stopDistance 时，敌人才移动
-            transform.position = Vector2.MoveTowards(transform.position, baseTransform.position, speed * Time.deltaTime);
-        }
-        else
-        {
-            speed = 0f;
+            attackTimer += Time.deltaTime;
+            if (attackTimer >= attackSpeed)
+            {
+                attackTimer = 0f;
+                AttackWall();
+            }
         }
     }
 
-
-    void OnTriggerEnter2D(Collider2D collision)
+    public void TakeDamage(int damageAmount)
     {
-        if (collision.CompareTag("Base"))
+        health -= damageAmount;
+
+        GameObject canvasObj = GameObject.Find("Damage");
+
+        Transform canvas = canvasObj.transform;
+
+        GameObject popup = Instantiate(damagePopupPrefab, transform.position + Vector3.up, Quaternion.identity, canvas);
+        popup.GetComponent<DamagePopup>().Setup(-damageAmount);
+
+        if (health <= 0)
         {
-            collision.GetComponent<Base>().TakeDamage(damage);
-             Debug.Log("Zombie: 碰到Base" ); 
-            // Destroy(gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            isAttacking = true;
+        }
+    }
+
+    private void AttackWall()
+    {
+        Wall wall = FindObjectOfType<Wall>();
+        if (wall != null)
+        {
+            wall.TakeDamage(damage);
         }
     }
 }
-
