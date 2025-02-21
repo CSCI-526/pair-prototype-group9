@@ -3,41 +3,17 @@ using TMPro;
 
 public class Base : MonoBehaviour
 {
-    public int maxHP = 100; 
-    public int currentHP;
-    public TextMeshProUGUI hpText; 
+    public TextMeshProUGUI hintText;
 
     void Start()
     {
-        currentHP = maxHP;
-        UpdateHPUI();
+        hintText.text = "Welcome! The shooter will shoot to the nearest zombie! Click the zombie you hate most to shoot as a priority!";
+        CancelInvoke(nameof(HideHint)); 
+        Invoke(nameof(HideHint), 10f); 
     }
 
-
-    public void TakeDamage(int damage)
-    {
-        currentHP -= damage;
-        if (currentHP <= 0)
-        {
-            currentHP = 0;
-            GameOver();
-        }
-        UpdateHPUI();
+    void HideHint(){
+        hintText.text= "";
     }
 
-
-    void UpdateHPUI()
-    {
-        if (hpText != null){
-            hpText.text = "HP: " + currentHP;
-            Debug.Log("HP Updated: " + hpText.text); 
-        }
-    }
-
-
-    void GameOver()
-    {
-        Debug.Log("Game Over! Base Destroyed.");
-
-    }
 }

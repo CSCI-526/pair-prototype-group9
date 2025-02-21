@@ -1,15 +1,17 @@
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class TowerBullet : MonoBehaviour
 {
-    public float speed = 30f; 
+    public float speed = 60f; 
     public int damage = 30;  
     private Vector3 targetPosition;  
 
     public void Initialize(Vector3 target)
     {
-        targetPosition = target;
-        Vector3 direction = (targetPosition - transform.position).normalized;
+        this.targetPosition = target;
+        print("Bullet target: " + target);
+        print("Bullet position: " + transform.position);
+        Vector3 direction = (this.targetPosition - transform.position).normalized+new Vector3(0,0.5f,0);
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -36,4 +38,5 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject); 
         }
     }
+
 }

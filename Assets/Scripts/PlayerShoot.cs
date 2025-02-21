@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -8,13 +9,17 @@ public class PlayerShoot : MonoBehaviour
     public float fireRate = 1f; 
     private Zombie targetZombie; 
 
+
     void Start()
     {
+
         StartCoroutine(ShootCoroutine()); 
     }
 
+
     void Update()
     {
+
         if (Input.GetMouseButtonDown(0))  
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));

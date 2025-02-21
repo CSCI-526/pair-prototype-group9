@@ -3,8 +3,14 @@ using TMPro;
 
 public class Wall : MonoBehaviour
 {
+    public TextMeshProUGUI hintText;
     public int health = 1000;  // 城墙初始血量
-    public TMP_Text healthText; 
+    public TMP_Text healthText;
+
+    void Start()
+    {
+        HideHint();
+    }
     void Update()
     {
         healthText.text = "HP " + health;
@@ -28,6 +34,13 @@ public class Wall : MonoBehaviour
     {
         // 游戏结束逻辑
         Debug.Log("Game Over");
-        Time.timeScale = 0;  // 暂停游戏
+        hintText.text = "The zombies ate your brains!";
+        CancelInvoke(nameof(HideHint)); 
+        Invoke(nameof(HideHint), 1f); 
+        Time.timeScale = 0;  
+    }
+
+    void HideHint(){
+        hintText.text = "";
     }
 }
